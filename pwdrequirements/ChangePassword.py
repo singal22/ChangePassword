@@ -4,7 +4,7 @@ from pwdrequirements.ValidatePassword import validate_password_requirements
 
 def change_password(old_password, new_password):
 
-    if old_password != old_password:
+    if old_password != 'HomeAssignment123$':
         return False
 
     if not validate_password_requirements(new_password):

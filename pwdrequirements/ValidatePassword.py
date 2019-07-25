@@ -11,13 +11,14 @@ special_chars = ['@', '#', '$', '&', '!', '*']
 def validate_password_requirements(pwd):
 
     success = True
+    msg = ''
 
     if not re.match(r'^[A-Za-z0-9@#$&!*]+$', pwd):
-        # Allowed characters
+        # Allowed characters: A-Za-z0-9@#$&!*
         success = False
 
     if len(pwd) < 18:
-        # length of pwd requirements should be atleast 18
+        # Length of password should be atleast 18
         success = False
 
     if not any(char.isupper() for char in pwd):
@@ -40,8 +41,8 @@ def validate_password_requirements(pwd):
     if count_special_characters(pwd, special_chars) > 4:
         success = False
 
-    # Password should not have more than 50% numbers
-    if count_digits(pwd) > (len(pwd)/2):
+    # Password should have less than 50% numbers
+    if count_digits(pwd) >= (len(pwd)/2):
         success = False
 
     # No duplicate repeat characters more than 4
