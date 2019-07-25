@@ -8,6 +8,7 @@ class TestPassword:
     """
     Test Password
     """
+    old_password = 'HomeAssignment12345$'
 
     @pytest.mark.parametrize("test_case,user_input,output", [
         ('Test valid password', 'Himanshu123456789&@', True),
@@ -37,12 +38,13 @@ class TestPassword:
         """
 
         assert validate_password_requirements(user_input) == output,\
-            ' Validation pwdrequirements failed:' + test_case + ':' + user_input
+            ' Validate password requirements test case failed:' + test_case + ':' + user_input
 
     @pytest.mark.parametrize("test_case,old_pwd,new_pwd, output", [
-        ('Test valid old password and new password', 'HomeAssignment123$', 'Himanshu123456789&@', True),
-        ('Test invalid old password with valid new', 'Home', 'Himanshu123456789&@', False),
+        ('Test valid old password and valid new password', old_password, 'Himanshu123456789&@', True),
+        ('Test invalid old password and valid new', 'Home', 'Himanshu123456789&@', False),
         ('Test invalid old password and invalid new', 'Home', 'Hi', False),
+        ('Test valid old password and invalid new', old_password, 'Hi', False)
     ])
     def test_old_pwd_requirements(self, test_case, old_pwd, new_pwd, output):
         """
@@ -50,4 +52,19 @@ class TestPassword:
         """
 
         assert change_password(old_pwd, new_pwd) == output,\
-            ' Validation old password failed:' + test_case + ':' + old_pwd
+            ' Old password test case failed:' + test_case + ':' + old_pwd
+
+    @pytest.mark.parametrize("test_case,old_pwd,new_pwd, output", [
+        ('Test 100% match percentage', old_password, old_password, False),
+        ('Test > 80% match percentage', old_password, 'HomeAssignment123$', False),
+        ('Test 80% match percentage', old_password, 'HomeAssignment12345$home9', False),
+        ('Test < 80% match percentage', old_password, 'Himanshu123456789#$&*', True)
+    ])
+    def test_match_pwd_requirements(self, test_case, old_pwd, new_pwd, output):
+        """
+        Test match percentage of old and new password
+
+        """
+
+        assert change_password(old_pwd, new_pwd) == output,\
+            ' Match password test case failed:' + test_case + ':' + new_pwd
